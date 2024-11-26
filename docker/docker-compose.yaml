@@ -1,0 +1,14 @@
+services:
+  db:
+    container_name: saas
+    image: postgres:15.5
+    environment:
+      POSTGRES_USER: saas
+      POSTGRES_PASSWORD: saas
+      PGDATA: /data/postgres
+    volumes:
+      - ../data/:/data/postgres
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
