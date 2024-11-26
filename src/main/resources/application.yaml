@@ -1,1 +1,10 @@
-spring.application.name=saas
+spring:
+  devtools:
+    restart:
+      enabled: true
+      additional-paths:
+        - src/main/resources
+      exclude:
+        - static/**
+        - public/**
+        - META-INF/maven/**
