@@ -3,6 +3,7 @@ package com.develop.saas.controller;
 import com.develop.saas.dto.CategoryRequest;
 import com.develop.saas.dto.CategoryResponse;
 import com.develop.saas.service.CategoryService;
+import jakarta.validation.Valid;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class CategoryController {
 
     @PostMapping(value = "/add")
     public CompletableFuture<ResponseEntity<CategoryResponse>> addCategory(
-            @RequestBody CategoryRequest categoryRequest) {
+            @Valid @RequestBody CategoryRequest categoryRequest) {
         return categoryService.addCategory(categoryRequest);
     }
 
