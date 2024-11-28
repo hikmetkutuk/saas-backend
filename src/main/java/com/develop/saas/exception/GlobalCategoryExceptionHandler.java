@@ -25,6 +25,11 @@ public class GlobalCategoryExceptionHandler {
         return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), "CATEGORY_PROCESSING_ERROR");
     }
 
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryNotFound(CategoryNotFoundException ex) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), "CATEGORY_NOT_FOUND");
+    }
+
     private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String message, String errorCode) {
         ErrorResponse errorResponse =
                 new ErrorResponse(LocalDateTime.now(), status.value(), status.getReasonPhrase(), message, errorCode);

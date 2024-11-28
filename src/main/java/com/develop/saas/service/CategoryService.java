@@ -3,6 +3,7 @@ package com.develop.saas.service;
 import com.develop.saas.dto.CategoryRequest;
 import com.develop.saas.dto.CategoryResponse;
 import com.develop.saas.exception.CategoryAlreadyExistsException;
+import com.develop.saas.exception.CategoryNotFoundException;
 import com.develop.saas.exception.CategoryPersistenceException;
 import com.develop.saas.exception.CategoryProcessingException;
 import com.develop.saas.mapper.CategoryMapper;
@@ -38,13 +39,30 @@ public class CategoryService {
             return ResponseEntity.ok(categoryResponse);
         } catch (CategoryAlreadyExistsException e) {
             log.warn("Category already exists: " + categoryRequest.name());
-            throw new CategoryAlreadyExistsException("Category already exists: " + categoryRequest.name());
+            throw e;
         } catch (DataIntegrityViolationException e) {
-            log.error("Error saving category: " + categoryRequest.name(), e.getMessage());
-            throw new CategoryPersistenceException("Error saving category: " + categoryRequest.name(), e);
+            log.error("Error saving category: " + categoryRequest.name(), e);
+            throw new CategoryPersistenceException("Error saving category: " + categoryRequest.name());
         } catch (RuntimeException e) {
-            log.error("Unexpected error processing category: " + categoryRequest.name(), e.getMessage());
-            throw new CategoryProcessingException("Unexpected error processing category: " + categoryRequest.name(), e);
+            log.error("Unexpected error processing category: " + categoryRequest.name(), e);
+            throw new CategoryProcessingException("Unexpected error processing category: " + categoryRequest.name());
+        }
+    }
+
+    public ResponseEntity<CategoryResponse> getCategory(Long id) {
+        try {
+            Category category = categoryRepository
+                    .findById(id)
+                    .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
+            CategoryResponse categoryResponse = categoryMapper.fromCategory(category);
+            log.info("Getting category with id: {}", id);
+            return ResponseEntity.ok(categoryResponse);
+        } catch (CategoryNotFoundException e) {
+            log.warn("Category not found with id: " + id);
+            throw e;
+        } catch (Exception e) {
+            log.error("Error getting category: " + id, e);
+            throw new CategoryProcessingException("Error getting category: " + id);
         }
     }
 }

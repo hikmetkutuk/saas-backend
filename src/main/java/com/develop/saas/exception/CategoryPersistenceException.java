@@ -1,7 +1,7 @@
 package com.develop.saas.exception;
 
 public class CategoryPersistenceException extends RuntimeException {
-    public CategoryPersistenceException(String message, Throwable cause) {
-        super("Error saving category: " + message, cause);
+    public CategoryPersistenceException(String message) {
+        super("Error saving category: " + message);
     }
 }
