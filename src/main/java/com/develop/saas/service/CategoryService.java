@@ -105,4 +105,25 @@ public class CategoryService {
             throw new CategoryProcessingException("Error updating category: " + id);
         }
     }
+
+    @Async
+    public CompletableFuture<ResponseEntity<String>> softDeleteCategory(Long id) {
+        try {
+            Category category = categoryRepository
+                    .findById(id)
+                    .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
+            category.setDeleted(true);
+            categoryRepository.save(category);
+            CategoryResponse categoryResponse = categoryMapper.fromCategory(category);
+            log.info("Category deleted successfully: {}", categoryResponse.name());
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.ok("Category deleted successfully: " + categoryResponse.name()));
+        } catch (CategoryNotFoundException e) {
+            log.warn("Category not found with id: " + id);
+            throw e;
+        } catch (Exception e) {
+            log.error("Error soft deleting category: " + id, e);
+            throw new CategoryProcessingException("Error soft deleting category: " + id);
+        }
+    }
 }

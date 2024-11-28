@@ -39,4 +39,9 @@ public class CategoryController {
             @PathVariable Long id, @Valid @RequestBody CategoryRequest categoryRequest) {
         return categoryService.updateCategory(id, categoryRequest);
     }
+
+    @PutMapping(value = "/delete/{id}")
+    public CompletableFuture<ResponseEntity<String>> softDeleteCategory(@PathVariable Long id) {
+        return categoryService.softDeleteCategory(id);
+    }
 }
