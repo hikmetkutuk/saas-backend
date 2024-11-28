@@ -9,6 +9,7 @@ import com.develop.saas.exception.CategoryProcessingException;
 import com.develop.saas.mapper.CategoryMapper;
 import com.develop.saas.model.Category;
 import com.develop.saas.repository.CategoryRepository;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -67,6 +68,20 @@ public class CategoryService {
         } catch (Exception e) {
             log.error("Error getting category: " + id, e);
             throw new CategoryProcessingException("Error getting category: " + id);
+        }
+    }
+
+    @Async
+    public CompletableFuture<ResponseEntity<List<CategoryResponse>>> getAllCategories() {
+        try {
+            List<Category> categories = categoryRepository.findByDeletedFalse();
+            List<CategoryResponse> categoryResponses =
+                    categories.stream().map(categoryMapper::fromCategory).toList();
+            log.info("Getting all categories");
+            return CompletableFuture.completedFuture(ResponseEntity.ok(categoryResponses));
+        } catch (Exception e) {
+            log.error("Error getting all categories", e);
+            throw new CategoryProcessingException("Error getting all categories");
         }
     }
 }

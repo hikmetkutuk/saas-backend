@@ -4,6 +4,7 @@ import com.develop.saas.dto.CategoryRequest;
 import com.develop.saas.dto.CategoryResponse;
 import com.develop.saas.service.CategoryService;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,5 +27,10 @@ public class CategoryController {
     @GetMapping(value = "/{id}")
     public CompletableFuture<ResponseEntity<CategoryResponse>> getCategoryById(@PathVariable Long id) {
         return categoryService.getCategory(id);
+    }
+
+    @GetMapping(value = "/list")
+    public CompletableFuture<ResponseEntity<List<CategoryResponse>>> getAllCategories() {
+        return categoryService.getAllCategories();
     }
 }
