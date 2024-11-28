@@ -84,4 +84,25 @@ public class CategoryService {
             throw new CategoryProcessingException("Error getting all categories");
         }
     }
+
+    @Async
+    public CompletableFuture<ResponseEntity<CategoryResponse>> updateCategory(
+            Long id, CategoryRequest categoryRequest) {
+        try {
+            Category category = categoryRepository
+                    .findById(id)
+                    .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
+            category.setName(categoryRequest.name());
+            categoryRepository.save(category);
+            CategoryResponse categoryResponse = categoryMapper.fromCategory(category);
+            log.info("Updating category with id: {}", id);
+            return CompletableFuture.completedFuture(ResponseEntity.ok(categoryResponse));
+        } catch (CategoryNotFoundException e) {
+            log.warn("Category not found with id: " + id);
+            throw e;
+        } catch (Exception e) {
+            log.error("Error updating category: " + id, e);
+            throw new CategoryProcessingException("Error updating category: " + id);
+        }
+    }
 }

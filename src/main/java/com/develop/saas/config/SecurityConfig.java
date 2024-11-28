@@ -18,7 +18,7 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
     private static final String[] WHITE_LIST = new String[] {
-        "/api/category/*",
+        "/api/category/**",
     };
 
     @Bean

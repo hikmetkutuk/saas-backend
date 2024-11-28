@@ -33,4 +33,10 @@ public class CategoryController {
     public CompletableFuture<ResponseEntity<List<CategoryResponse>>> getAllCategories() {
         return categoryService.getAllCategories();
     }
+
+    @PutMapping(value = "/update/{id}")
+    public CompletableFuture<ResponseEntity<CategoryResponse>> updateCategory(
+            @PathVariable Long id, @Valid @RequestBody CategoryRequest categoryRequest) {
+        return categoryService.updateCategory(id, categoryRequest);
+    }
 }
