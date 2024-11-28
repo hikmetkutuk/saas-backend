@@ -3,6 +3,7 @@ package com.develop.saas.controller;
 import com.develop.saas.dto.CategoryRequest;
 import com.develop.saas.dto.CategoryResponse;
 import com.develop.saas.service.CategoryService;
+import java.util.concurrent.CompletableFuture;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +17,13 @@ public class CategoryController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<CategoryResponse> addCategory(@RequestBody CategoryRequest categoryRequest) {
+    public CompletableFuture<ResponseEntity<CategoryResponse>> addCategory(
+            @RequestBody CategoryRequest categoryRequest) {
         return categoryService.addCategory(categoryRequest);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
+    public CompletableFuture<ResponseEntity<CategoryResponse>> getCategoryById(@PathVariable Long id) {
         return categoryService.getCategory(id);
     }
 }

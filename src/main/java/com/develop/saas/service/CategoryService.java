@@ -9,9 +9,11 @@ import com.develop.saas.exception.CategoryProcessingException;
 import com.develop.saas.mapper.CategoryMapper;
 import com.develop.saas.model.Category;
 import com.develop.saas.repository.CategoryRepository;
+import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -25,7 +27,8 @@ public class CategoryService {
         this.categoryMapper = categoryMapper;
     }
 
-    public ResponseEntity<CategoryResponse> addCategory(CategoryRequest categoryRequest) {
+    @Async
+    public CompletableFuture<ResponseEntity<CategoryResponse>> addCategory(CategoryRequest categoryRequest) {
         try {
             if (categoryRepository.existsByNameIgnoreCase(categoryRequest.name())) {
                 throw new CategoryAlreadyExistsException("Category already exists!");
@@ -36,7 +39,7 @@ public class CategoryService {
 
             CategoryResponse categoryResponse = categoryMapper.fromCategory(category);
 
-            return ResponseEntity.ok(categoryResponse);
+            return CompletableFuture.completedFuture(ResponseEntity.ok(categoryResponse));
         } catch (CategoryAlreadyExistsException e) {
             log.warn("Category already exists: " + categoryRequest.name());
             throw e;
@@ -49,14 +52,15 @@ public class CategoryService {
         }
     }
 
-    public ResponseEntity<CategoryResponse> getCategory(Long id) {
+    @Async
+    public CompletableFuture<ResponseEntity<CategoryResponse>> getCategory(Long id) {
         try {
             Category category = categoryRepository
                     .findById(id)
                     .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
             CategoryResponse categoryResponse = categoryMapper.fromCategory(category);
             log.info("Getting category with id: {}", id);
-            return ResponseEntity.ok(categoryResponse);
+            return CompletableFuture.completedFuture(ResponseEntity.ok(categoryResponse));
         } catch (CategoryNotFoundException e) {
             log.warn("Category not found with id: " + id);
             throw e;
