@@ -1,8 +1,10 @@
 package com.develop.saas.controller;
 
+import com.develop.saas.documentation.CategoryApiDocumentation;
 import com.develop.saas.dto.CategoryRequest;
 import com.develop.saas.dto.CategoryResponse;
 import com.develop.saas.service.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -11,13 +13,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/category")
-public class CategoryController {
+@Tag(name = "Category", description = "Operations related to category")
+public class CategoryController implements CategoryApiDocumentation {
     private final CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
+    @Override
     @PostMapping(value = "/add")
     public CompletableFuture<ResponseEntity<CategoryResponse>> addCategory(
             @Valid @RequestBody CategoryRequest categoryRequest) {

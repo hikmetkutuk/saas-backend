@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,10 +19,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
     // Custom query to find categories with at least one script
     @Query("SELECT c FROM Category c JOIN c.scripts s GROUP BY c HAVING COUNT(s) > 0")
     List<Category> findCategoriesWithScripts();
-
-    @Modifying
-    @Query("UPDATE Category c SET c.deleted = true WHERE c.id = :id")
-    void softDeleteById(@Param("id") Long id);
 
     // Retrieve only non-deleted categories
     List<Category> findByDeletedFalse();

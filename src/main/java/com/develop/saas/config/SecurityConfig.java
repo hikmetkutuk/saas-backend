@@ -1,5 +1,7 @@
 package com.develop.saas.config;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,11 +16,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@SecurityScheme(name = "bearerToken", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT")
 public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
     private static final String[] WHITE_LIST = new String[] {
-        "/api/category/**",
+        "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/category/**",
     };
 
     @Bean
