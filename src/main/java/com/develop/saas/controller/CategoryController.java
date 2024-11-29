@@ -21,7 +21,6 @@ public class CategoryController implements CategoryApiDocumentation {
         this.categoryService = categoryService;
     }
 
-    @Override
     @PostMapping(value = "/add")
     public CompletableFuture<ResponseEntity<CategoryResponse>> addCategory(
             @Valid @RequestBody CategoryRequest categoryRequest) {
@@ -44,7 +43,7 @@ public class CategoryController implements CategoryApiDocumentation {
         return categoryService.updateCategory(id, categoryRequest);
     }
 
-    @PutMapping(value = "/delete/{id}")
+    @PatchMapping(value = "/delete/{id}")
     public CompletableFuture<ResponseEntity<String>> softDeleteCategory(@PathVariable Long id) {
         return categoryService.softDeleteCategory(id);
     }
