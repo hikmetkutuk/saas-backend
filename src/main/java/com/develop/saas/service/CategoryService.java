@@ -57,7 +57,7 @@ public class CategoryService {
     public CompletableFuture<ResponseEntity<CategoryResponse>> getCategory(Long id) {
         try {
             Category category = categoryRepository
-                    .findById(id)
+                    .findByIdAndDeletedFalse(id)
                     .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
             CategoryResponse categoryResponse = categoryMapper.fromCategory(category);
             log.info("Getting category with id: {}", id);
@@ -90,7 +90,7 @@ public class CategoryService {
             Long id, CategoryRequest categoryRequest) {
         try {
             Category category = categoryRepository
-                    .findById(id)
+                    .findByIdAndDeletedFalse(id)
                     .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
             category.setName(categoryRequest.name());
             categoryRepository.save(category);
@@ -110,7 +110,7 @@ public class CategoryService {
     public CompletableFuture<ResponseEntity<String>> softDeleteCategory(Long id) {
         try {
             Category category = categoryRepository
-                    .findById(id)
+                    .findByIdAndDeletedFalse(id)
                     .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
             category.setDeleted(true);
             categoryRepository.save(category);

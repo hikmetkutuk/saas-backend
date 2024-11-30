@@ -22,4 +22,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
 
     // Retrieve only non-deleted categories
     List<Category> findByDeletedFalse();
+
+    // Retrieve only non-deleted category by id
+    Optional<Category> findByIdAndDeletedFalse(Long id);
 }
