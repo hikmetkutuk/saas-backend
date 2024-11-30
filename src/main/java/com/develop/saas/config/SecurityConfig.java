@@ -20,9 +20,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
-    private static final String[] WHITE_LIST = new String[] {
-        "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/category/**",
-    };
+    private static final String[] WHITE_LIST =
+            new String[] {"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/category/**", "/api/script/**"
+            };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

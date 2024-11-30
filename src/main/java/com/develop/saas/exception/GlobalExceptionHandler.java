@@ -21,6 +21,32 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryAlreadyExists(AlreadyExistsException ex) {
+        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), "ALREADY_EXISTS");
+    }
+
+    @ExceptionHandler(PersistenceException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryPersistence(PersistenceException ex) {
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), "PERSISTENCE_ERROR");
+    }
+
+    @ExceptionHandler(ProcessingException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryProcessing(ProcessingException ex) {
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), "PROCESSING_ERROR");
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryNotFound(NotFoundException ex) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), "NOT_FOUND");
+    }
+
+    private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String message, String errorCode) {
+        ErrorResponse errorResponse =
+                new ErrorResponse(LocalDateTime.now(), status.value(), status.getReasonPhrase(), message, errorCode);
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
     private ErrorResponse mapToErrorResponse(FieldError fieldError) {
         return new ErrorResponse(
                 LocalDateTime.now(),
