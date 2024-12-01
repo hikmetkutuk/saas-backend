@@ -22,6 +22,13 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
     validate-on-migrate: true
+  config:
+    import: file:.env[.properties],file:.env[.properties]
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 springdoc:
   api-docs:
@@ -30,3 +37,8 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
+
+s3:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  bucket: ${AWS_S3_BUCKET}

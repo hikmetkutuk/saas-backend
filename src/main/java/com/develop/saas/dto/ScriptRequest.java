@@ -7,6 +7,6 @@ public record ScriptRequest(
         String title,
         String description,
         String content,
-        MultipartFile imageUrl,
+        MultipartFile image,
         boolean isActive,
         List<Long> categoryIds) {}

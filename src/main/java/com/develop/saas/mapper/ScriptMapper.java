@@ -26,7 +26,7 @@ public class ScriptMapper {
                 .title(scriptRequest.title())
                 .description(scriptRequest.description())
                 .content(scriptRequest.content())
-                .imageUrl(String.valueOf(scriptRequest.imageUrl()))
+                .imageUrl(scriptRequest.image().getOriginalFilename())
                 .isActive(scriptRequest.isActive())
                 .categories(categories)
                 .build();

@@ -28,6 +28,7 @@
         <url/>
     </scm>
     <properties>
+        <aws.version>1.12.470</aws.version>
         <java.version>17</java.version>
     </properties>
     <dependencies>
@@ -84,6 +85,18 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.3.0</version>
+        </dependency>
+        <!-- aws -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${aws.version}</version>
+        </dependency>
+        <!-- env -->
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>java-dotenv</artifactId>
+            <version>5.2.2</version>
         </dependency>
         <!-- test -->
         <dependency>

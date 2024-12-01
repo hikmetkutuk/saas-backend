@@ -20,19 +20,30 @@ import org.springframework.stereotype.Service;
 public class ScriptService {
     private final ScriptRepository scriptRepository;
     private final ScriptMapper scriptMapper;
+    private final FileService fileService;
 
-    public ScriptService(ScriptRepository scriptRepository, ScriptMapper scriptMapper) {
+    public ScriptService(ScriptRepository scriptRepository, ScriptMapper scriptMapper, FileService fileService) {
         this.scriptRepository = scriptRepository;
         this.scriptMapper = scriptMapper;
+        this.fileService = fileService;
     }
 
     @Async
-    @Transactional
     public CompletableFuture<ResponseEntity<ScriptResponse>> addScript(ScriptRequest scriptRequest) {
         try {
-            log.info("Saving script: {}", scriptRequest.title());
+            return CompletableFuture.completedFuture(saveScript(scriptRequest));
+        } catch (RuntimeException e) {
+            log.error("Unexpected error processing script: " + scriptRequest.title(), e);
+            throw new ProcessingException("Unexpected error processing script: " + scriptRequest.title());
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<ScriptResponse> saveScript(ScriptRequest scriptRequest) {
+        try {
             Script script = scriptRepository.save(scriptMapper.toScript(scriptRequest));
-            return CompletableFuture.completedFuture(ResponseEntity.ok(scriptMapper.fromScript(script)));
+            fileService.uploadFileToS3(scriptRequest.image());
+            return ResponseEntity.ok(scriptMapper.fromScript(script));
         } catch (DataIntegrityViolationException e) {
             log.error("Unexpected error processing script: " + scriptRequest.title(), e);
             throw new PersistenceException("Unexpected error processing script: " + scriptRequest.title());

@@ -4,13 +4,12 @@ import com.develop.saas.dto.ScriptRequest;
 import com.develop.saas.dto.ScriptResponse;
 import com.develop.saas.service.ScriptService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/script")
@@ -22,9 +21,17 @@ public class ScriptController {
         this.scriptService = scriptService;
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CompletableFuture<ResponseEntity<ScriptResponse>> addScript(
-            @RequestBody @Valid ScriptRequest scriptRequest) {
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("content") String content,
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("isActive") boolean isActive,
+            @RequestParam("categoryIds") List<Long> categoryIds) {
+
+        ScriptRequest scriptRequest = new ScriptRequest(title, description, content, image, isActive, categoryIds);
+
         return scriptService.addScript(scriptRequest);
     }
 }
