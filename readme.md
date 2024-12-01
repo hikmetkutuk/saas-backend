@@ -8,6 +8,7 @@
 ![Postgres](https://img.shields.io/static/v1?&logo=postgresql&label=postgre%20sql&message=15.5&color=336791&style=for-the-badge)
 ![Docker](https://img.shields.io/static/v1?&logo=docker&label=docker&message=26.0.0&color=086dd7&style=for-the-badge)
 ![Swagger](https://img.shields.io/static/v1?&logo=swagger&label=swagger&message=3.0.1&color=44cc11&style=for-the-badge)
+![Aws](https://img.shields.io/static/v1?&logo=amazon&label=aws&message=1.12.470&color=ff9900&style=for-the-badge)
 
 ---
 
