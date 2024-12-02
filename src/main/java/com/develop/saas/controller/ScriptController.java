@@ -5,6 +5,7 @@ import com.develop.saas.dto.ScriptResponse;
 import com.develop.saas.service.ScriptService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,10 @@ public class ScriptController {
     @GetMapping(value = "/{id}")
     public CompletableFuture<ResponseEntity<ScriptResponse>> getScriptById(@PathVariable Long id) {
         return scriptService.getScriptById(id);
+    }
+
+    @GetMapping(value = "/list")
+    public CompletableFuture<ResponseEntity<List<ScriptResponse>>> getAllScripts() {
+        return scriptService.getAllScripts();
     }
 }

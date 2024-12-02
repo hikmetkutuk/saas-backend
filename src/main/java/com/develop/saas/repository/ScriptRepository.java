@@ -1,6 +1,7 @@
 package com.develop.saas.repository;
 
 import com.develop.saas.model.Script;
+import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -16,5 +17,8 @@ public interface ScriptRepository extends JpaRepository<Script, Long> {
      * So, instead of making all Lazy relationships Eager, you can selectively load specific relationships.
      */
     @NotNull @EntityGraph(attributePaths = "categories")
-    Optional<Script> findById(@NotNull Long id);
+    Optional<Script> findByIdAndDeletedFalse(@NotNull Long id);
+
+    @EntityGraph(attributePaths = "categories")
+    List<Script> findByIsActiveTrueAndDeletedFalse();
 }

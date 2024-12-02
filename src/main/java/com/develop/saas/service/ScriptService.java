@@ -9,6 +9,7 @@ import com.develop.saas.mapper.ScriptMapper;
 import com.develop.saas.model.Script;
 import com.develop.saas.repository.ScriptRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -57,8 +58,9 @@ public class ScriptService {
     @Async
     public CompletableFuture<ResponseEntity<ScriptResponse>> getScriptById(Long id) {
         try {
-            Script script =
-                    scriptRepository.findById(id).orElseThrow(() -> new NotFoundException("Script not found: " + id));
+            Script script = scriptRepository
+                    .findByIdAndDeletedFalse(id)
+                    .orElseThrow(() -> new NotFoundException("Script not found: " + id));
             ScriptResponse scriptResponse = scriptMapper.fromScript(script);
             log.info("Script found: {}", scriptResponse.title());
             return CompletableFuture.completedFuture(ResponseEntity.ok(scriptResponse));
@@ -68,6 +70,20 @@ public class ScriptService {
         } catch (RuntimeException e) {
             log.error("Unexpected error processing script: ", e);
             throw new ProcessingException("Unexpected error processing script: ");
+        }
+    }
+
+    @Async
+    public CompletableFuture<ResponseEntity<List<ScriptResponse>>> getAllScripts() {
+        try {
+            List<Script> scripts = scriptRepository.findByIsActiveTrueAndDeletedFalse();
+            List<ScriptResponse> scriptResponses =
+                    scripts.stream().map(scriptMapper::fromScript).toList();
+            log.info("Getting all scripts");
+            return CompletableFuture.completedFuture(ResponseEntity.ok(scriptResponses));
+        } catch (RuntimeException e) {
+            log.error("Unexpected error processing script: ", e);
+            throw new ProcessingException("Unexpected error processing script:");
         }
     }
 }
