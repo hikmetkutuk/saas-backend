@@ -2,6 +2,7 @@ package com.develop.saas.service;
 
 import com.develop.saas.dto.ScriptRequest;
 import com.develop.saas.dto.ScriptResponse;
+import com.develop.saas.exception.NotFoundException;
 import com.develop.saas.exception.PersistenceException;
 import com.develop.saas.exception.ProcessingException;
 import com.develop.saas.mapper.ScriptMapper;
@@ -50,6 +51,23 @@ public class ScriptService {
         } catch (RuntimeException e) {
             log.error("Unexpected error processing script: " + scriptRequest.title(), e);
             throw new ProcessingException("Unexpected error processing script: " + scriptRequest.title());
+        }
+    }
+
+    @Async
+    public CompletableFuture<ResponseEntity<ScriptResponse>> getScriptById(Long id) {
+        try {
+            Script script =
+                    scriptRepository.findById(id).orElseThrow(() -> new NotFoundException("Script not found: " + id));
+            ScriptResponse scriptResponse = scriptMapper.fromScript(script);
+            log.info("Script found: {}", scriptResponse.title());
+            return CompletableFuture.completedFuture(ResponseEntity.ok(scriptResponse));
+        } catch (NotFoundException e) {
+            log.warn("Script not found: " + id);
+            throw e;
+        } catch (RuntimeException e) {
+            log.error("Unexpected error processing script: ", e);
+            throw new ProcessingException("Unexpected error processing script: ");
         }
     }
 }

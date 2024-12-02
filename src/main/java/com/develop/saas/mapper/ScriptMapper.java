@@ -1,5 +1,6 @@
 package com.develop.saas.mapper;
 
+import com.develop.saas.dto.CategoryResponse;
 import com.develop.saas.dto.ScriptRequest;
 import com.develop.saas.dto.ScriptResponse;
 import com.develop.saas.model.Category;
@@ -36,6 +37,11 @@ public class ScriptMapper {
         if (script == null) {
             return null;
         }
+
+        List<CategoryResponse> categories = script.getCategories().stream()
+                .map(category -> new CategoryResponse(category.getId(), category.getName()))
+                .toList();
+
         return new ScriptResponse(
                 script.getId(),
                 script.getTitle(),
@@ -43,6 +49,6 @@ public class ScriptMapper {
                 script.getContent(),
                 script.getImageUrl(),
                 script.isActive(),
-                null);
+                categories);
     }
 }

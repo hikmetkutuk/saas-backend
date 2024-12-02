@@ -34,4 +34,9 @@ public class ScriptController {
 
         return scriptService.addScript(scriptRequest);
     }
+
+    @GetMapping(value = "/{id}")
+    public CompletableFuture<ResponseEntity<ScriptResponse>> getScriptById(@PathVariable Long id) {
+        return scriptService.getScriptById(id);
+    }
 }
