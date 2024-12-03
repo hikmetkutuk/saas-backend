@@ -2,6 +2,7 @@ package com.develop.saas.controller;
 
 import com.develop.saas.dto.ScriptRequest;
 import com.develop.saas.dto.ScriptResponse;
+import com.develop.saas.dto.ScriptUpdateRequest;
 import com.develop.saas.service.ScriptService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -36,5 +37,12 @@ public class ScriptController {
     @GetMapping(value = "/list")
     public CompletableFuture<ResponseEntity<List<ScriptResponse>>> getAllScripts() {
         return scriptService.getAllScripts();
+    }
+
+    @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public CompletableFuture<ResponseEntity<ScriptResponse>> updateScript(
+            @PathVariable Long id, @Valid @ModelAttribute ScriptUpdateRequest scriptUpdateRequest) {
+
+        return scriptService.updateScript(id, scriptUpdateRequest);
     }
 }

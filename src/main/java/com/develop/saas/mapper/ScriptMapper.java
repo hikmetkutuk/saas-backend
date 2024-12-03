@@ -3,6 +3,7 @@ package com.develop.saas.mapper;
 import com.develop.saas.dto.CategoryResponse;
 import com.develop.saas.dto.ScriptRequest;
 import com.develop.saas.dto.ScriptResponse;
+import com.develop.saas.dto.ScriptUpdateRequest;
 import com.develop.saas.model.Category;
 import com.develop.saas.model.Script;
 import com.develop.saas.repository.CategoryRepository;
@@ -50,5 +51,31 @@ public class ScriptMapper {
                 script.getImageUrl(),
                 script.isActive(),
                 categories);
+    }
+
+    public void updateScriptFromRequest(ScriptUpdateRequest scriptUpdateRequest, Script script) {
+        if (scriptUpdateRequest == null || script == null) {
+            return;
+        }
+
+        if (scriptUpdateRequest.title() != null) {
+            script.setTitle(scriptUpdateRequest.title());
+        }
+        if (scriptUpdateRequest.description() != null) {
+            script.setDescription(scriptUpdateRequest.description());
+        }
+        if (scriptUpdateRequest.content() != null) {
+            script.setContent(scriptUpdateRequest.content());
+        }
+        if (scriptUpdateRequest.image() != null) {
+            script.setImageUrl(scriptUpdateRequest.image().getOriginalFilename());
+        }
+        if (scriptUpdateRequest.isActive() != null) {
+            script.setActive(scriptUpdateRequest.isActive());
+        }
+        if (scriptUpdateRequest.categoryIds() != null) {
+            List<Category> categories = categoryRepository.findAllById(scriptUpdateRequest.categoryIds());
+            script.setCategories(categories);
+        }
     }
 }
