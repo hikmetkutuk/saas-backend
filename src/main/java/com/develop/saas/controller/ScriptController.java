@@ -45,4 +45,9 @@ public class ScriptController {
 
         return scriptService.updateScript(id, scriptUpdateRequest);
     }
+
+    @PatchMapping(value = "/delete/{id}")
+    public CompletableFuture<ResponseEntity<String>> softDeleteScript(@PathVariable Long id) {
+        return scriptService.softDeleteScript(id);
+    }
 }

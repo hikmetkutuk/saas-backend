@@ -110,4 +110,20 @@ public class ScriptService {
             throw new ProcessingException("Unexpected error processing script: ");
         }
     }
+
+    @Async
+    public CompletableFuture<ResponseEntity<String>> softDeleteScript(Long id) {
+        try {
+            Script script = scriptRepository
+                    .findByIdAndDeletedFalse(id)
+                    .orElseThrow(() -> new NotFoundException("Script not found: " + id));
+            script.setDeleted(true);
+            scriptRepository.save(script);
+            log.info("Script deleted: {}", id);
+            return CompletableFuture.completedFuture(ResponseEntity.ok("Script deleted: " + id));
+        } catch (NotFoundException e) {
+            log.warn("Script not found: " + id);
+            throw e;
+        }
+    }
 }
