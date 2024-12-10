@@ -26,6 +26,7 @@ public class Script extends BaseEntity {
     @Column(name = "image_url", length = 1024)
     private String imageUrl;
 
+    @Builder.Default
     @Column(name = "is_active", nullable = false)
     private boolean isActive = false;
 
